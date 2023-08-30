@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekst naar Spraak</title>
+<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+<script>
+function converteerNaarSpraak() {
+    var tekst = document.getElementById("tekstInvoer").value;
+    var stem = document.getElementById("stemSelect").value;
+
+    responsiveVoice.speak(tekst, stem);
+
+    var audioBlob = new Blob([responsiveVoice.voice.generate(tekst, { amplitude: 38, wordgap: 75, pitch: 50, speed: 0 })], { type: 'audio/wav' });
+    var audioUrl = URL.createObjectURL(audioBlob);
+
+    var audioElement = document.createElement("audio");
+    audioElement.src = audioUrl;
+    audioElement.controls = true;
+
+    var downloadLink = document.createElement("a");
+    downloadLink.href = audioUrl;
+    downloadLink.download = "spraak.wav";
+    downloadLink.innerHTML = "Download Spraak";
+
+    document.getElementById("audioContainer").innerHTML = "";
+    document.getElementById("audioContainer").appendChild(audioElement);
+
+    document.getElementById("downloadContainer").innerHTML = "";
+    document.getElementById("downloadContainer").appendChild(downloadLink);
+}
+</script>
+</head>
+<body>
+<h1>Tekst naar Spraak Website</h1>
+<p>Voer hieronder de tekst in die je wilt omzetten naar spraak:</p>
+<textarea id="tekstInvoer" rows="4" cols="50"></textarea>
+<br>
+<label for="stemSelect">Kies een stem:</label>
+<select id="stemSelect">
+    <option value="Dutch Female">Nederlandse Vrouw</option>
+    <option value="Dutch Male">Nederlandse Man</option>
+</select>
+<br>
+<button onclick="converteerNaarSpraak()">Speel Af en Download</button>
+<div id="audioContainer"></div>
+<div id="downloadContainer"></div>
+</body>
+</html>
